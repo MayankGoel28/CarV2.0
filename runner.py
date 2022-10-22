@@ -3,7 +3,7 @@ from kafka import KafkaConsumer, KafkaProducer
 from threading import Lock
 import json
 import requests
-from car import Car 
+from car import Car
 from geopy import distance
 import time
 import threading
@@ -13,34 +13,46 @@ import time
 import streamlit as st
 import sys
 
+
 def traverser():
-    for i in range(len(path)-1):
+    for i in range(len(path) - 1):
         current_coords = path[i]
-        target = path[i+1]
-        while(True):
+        target = path[i + 1]
+        while True:
             # print(current_coords)
             time.sleep(0.05)
             dist = distance.geodesic(current_coords, target).km
             # print(dist)
             if speed > dist:
-                current_coords = target 
+                current_coords = target
             else:
-                current_coords[0] = (current_coords[0]*(dist-speed) + target[0]*speed)/dist
-                current_coords[1] = (current_coords[1]*(dist-speed) + target[1]*speed)/dist
-            
+                current_coords[0] = (
+                    current_coords[0] * (dist - speed) + target[0] * speed
+                ) / dist
+                current_coords[1] = (
+                    current_coords[1] * (dist - speed) + target[1] * speed
+                ) / dist
+
             new_pin = vehicle.update_lat_long(current_coords[0], current_coords[1])
             # print(new_pin)
             if new_pin != vehicle.location:
                 vehicle.location_update(new_pin)
-            
-            event = {"x": current_coords[0], "y": current_coords[1], "ID": vehicle.carID, "speed": speed, "SOS": SOS}
-            vehicle.produce(json.dumps(event).encode('utf-8'))
 
-            if target[0]==current_coords[0] and target[1]==current_coords[1]:
+            event = {
+                "x": current_coords[0],
+                "y": current_coords[1],
+                "ID": vehicle.carID,
+                "speed": speed,
+                "SOS": SOS,
+            }
+            vehicle.produce(json.dumps(event).encode("utf-8"))
+
+            if target[0] == current_coords[0] and target[1] == current_coords[1]:
                 break
 
+
 def consumer():
-    while(True):
+    while True:
         ret = vehicle.consume()
         if ret == []:
             continue
@@ -48,6 +60,7 @@ def consumer():
         my_surroundings.append(ret)
         batch_lock.release()
         print("---------------------")
+
 
 def get_batch():
     ret = []
@@ -57,8 +70,10 @@ def get_batch():
     batch_lock.release()
     return ret
 
+
 SOS = False
 locs = {}
+
 
 def get_display_data(ego_id):
     global locs
@@ -66,12 +81,13 @@ def get_display_data(ego_id):
     locs = update_locs(locs, batch)
     return update_image(locs, ego_id)
 
+
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
         print("error")
         exit()
-    
+
     run = int(sys.argv[1])
     config_json_file = sys.argv[2]
 
@@ -87,7 +103,7 @@ if __name__ == "__main__":
 
     t1 = threading.Thread(target=traverser)
     t2 = threading.Thread(target=consumer)
-    
+
     t1.start()
     t2.start()
 
@@ -101,10 +117,13 @@ if __name__ == "__main__":
         while True:
             image = get_display_data(ego_id)
             display.image(image)
-            # if sos:
-            #   SOS = True
-            # else:
-            #   SOS = False
+            with st.sidebar:
+                if st.button("SOS"):
+                    SOS = True
+                    if st.button("End Distress"):
+                        SOS = False
+                else:
+                    SOS = False
             time.sleep(0.05)
 
     # vehicle.update_lat_long(config["PATH"][0][0], config["PATH"][0][1])
