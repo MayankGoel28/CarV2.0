@@ -33,7 +33,7 @@ def traverser():
             if new_pin != vehicle.location:
                 vehicle.location_update(new_pin)
             
-            event = {"x": current_coords[0], "y": current_coords[1], "ID": vehicle.carID, "speed": speed}
+            event = {"x": current_coords[0], "y": current_coords[1], "ID": vehicle.carID, "speed": speed, "SOS": SOS}
             vehicle.produce(json.dumps(event).encode('utf-8'))
 
             if target[0]==current_coords[0] and target[1]==current_coords[1]:
@@ -57,6 +57,7 @@ def get_batch():
     batch_lock.release()
     return ret
 
+SOS = False
 locs = {}
 
 def get_display_data(ego_id):
@@ -98,6 +99,10 @@ if __name__ == "__main__":
         while True:
             image = get_display_data(ego_id)
             display.image(image)
+            # if sos:
+            #   SOS = True
+            # else:
+            #   SOS = False
             time.sleep(0.05)
 
     # vehicle.update_lat_long(config["PATH"][0][0], config["PATH"][0][1])
