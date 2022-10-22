@@ -8,10 +8,10 @@ import time
 class Car:
     def __init__(self, config):
         # use a config file to define demo behaviour
-        time.sleep(5)
         self.consumer = KafkaConsumer(bootstrap_servers='164.52.208.158:9092') # Consumer to listen to local messages
         self.producer = KafkaProducer(bootstrap_servers='164.52.208.158:9092') # producer to send events to local topic
         
+        time.sleep(5)
         
         self.locationAPI = MapMyIndia("18b08477725b6446165d1f1b23b8a4f6")
 
@@ -54,4 +54,4 @@ class Car:
 
         # result = requests.get(self.locationAPI.reverse_geocoding_api, params=parameters)
         # return result.json()["results"][0]["pincode"]
-        return 500032
+        return "500032"
