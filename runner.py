@@ -44,6 +44,8 @@ def traverser():
                 "ID": vehicle.carID,
                 "speed": speed,
                 "SOS": SOS,
+                "t1_x": target[0],
+                "t1_y": target[1],
             }
             vehicle.produce(json.dumps(event).encode("utf-8"))
 

@@ -1,9 +1,9 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 
 def update_locs(locs, batch):
     for row in batch:
-        id,x,y, sos = row["ID"], row["x"], row["y"], row["SOS"]
-        locs[id] = (x,y, sos)
+        id,x,y,sos,t1_x,t1_y = row["ID"], row["x"], row["y"], row["SOS"], row["t1_x"], row["t1_y"]
+        locs[id] = (x,y,sos,t1_x,t1_y)
     return locs
 
 def convert_location(x, y, ego_x, ego_y):
@@ -17,8 +17,8 @@ def update_image(locs, ego_id):
     # locs is of form {id:(x,y)}
     background = Image.open("background.png")
     for id in locs:
-        ego_x, ego_y,_ = locs[ego_id]
-        x, y, sos = locs[id]
+        ego_x, ego_y,_,_,_ = locs[ego_id]
+        x, y, sos, t1_x, t1_y = locs[id]
         if sos:
             car = Image.open(f"sos.png").convert("RGBA")
         elif id == ego_id:
@@ -29,4 +29,7 @@ def update_image(locs, ego_id):
         car = car.resize((100, 100))
         x,y = convert_location(x,y, ego_x, ego_y)
         background.paste(car, (x,y), mask = car)
+        draw = ImageDraw.Draw(background)
+        destx,desty = convert_location(t1_x,t1_y, ego_x, ego_y)
+        draw.line((x+50, y+50, destx+50, desty+50), fill=128, width=5)
     return background
