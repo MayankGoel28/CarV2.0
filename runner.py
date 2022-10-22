@@ -68,12 +68,14 @@ def get_display_data(ego_id):
 
 if __name__ == "__main__":
 
-    if len(sys.argv) < 2 or sys.argv[1] == 0:
-        run = 0
-    else:
-        run = 1
+    if len(sys.argv) != 3:
+        print("error")
+        exit()
+    
+    run = int(sys.argv[1])
+    config_json_file = sys.argv[2]
 
-    with open("vehicle1.json") as json_file:
+    with open(config_json_file) as json_file:
         config = json.load(json_file)
     print(config)
     path = config["PATH"]

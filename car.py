@@ -50,8 +50,8 @@ class Car:
         self.lat = lat
         self.long = long
 
-        parameters = {"lat": lat, "lng": long, "REST_KEY":"18b08477725b6446165d1f1b23b8a4f6"}
+        # parameters = {"lat": lat, "lng": long, "REST_KEY":"18b08477725b6446165d1f1b23b8a4f6"}
 
-        result = requests.get(self.locationAPI.reverse_geocoding_api, params=parameters)
-        return result.json()["results"][0]["pincode"]
-        
+        # result = requests.get(self.locationAPI.reverse_geocoding_api, params=parameters)
+        # return result.json()["results"][0]["pincode"]
+        return 500032
