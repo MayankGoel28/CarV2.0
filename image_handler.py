@@ -19,7 +19,10 @@ def update_image(locs, ego_id):
     for id in locs:
         ego_x, ego_y = locs[ego_id]
         x, y = locs[id]
-        car = Image.open(f"other.png").convert("RGBA")
+        if id == ego_id:
+            car = Image.open(f"self.png").convert("RGBA")
+        else:
+            car = Image.open(f"other.png").convert("RGBA")
         # resize image from before for performance
         car = car.resize((100, 100))
         x,y = convert_location(x,y, ego_x, ego_y)

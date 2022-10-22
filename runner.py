@@ -67,7 +67,7 @@ def get_display_data(ego_id):
 
 if __name__ == "__main__":
 
-    if len(sys) < 2 or sys.argv[1] == 0:
+    if len(sys.argv) < 2 or sys.argv[1] == 0:
         run = 0
     else:
         run = 1
