@@ -11,6 +11,7 @@ from threading import Lock
 from image_handler import update_image, update_locs
 import time
 import streamlit as st
+import sys
 
 def traverser():
     for i in range(len(path)-1):
@@ -65,6 +66,12 @@ def get_display_data(ego_id):
     return update_image(locs, ego_id)
 
 if __name__ == "__main__":
+
+    if len(sys) < 2 or sys.argv[1] == 0:
+        run = 0
+    else:
+        run = 1
+
     with open("vehicle1.json") as json_file:
         config = json.load(json_file)
     print(config)
@@ -82,13 +89,15 @@ if __name__ == "__main__":
     t2.start()
 
     my_surroundings = []
-    st.title("Dashboard")
 
-    display = st.empty()
+    if run:
+        st.title("Dashboard")
 
-    while True:
-        image = get_display_data(ego_id)
-        display.image(image)
-        time.sleep(0.05)
+        display = st.empty()
+
+        while True:
+            image = get_display_data(ego_id)
+            display.image(image)
+            time.sleep(0.05)
 
     # vehicle.update_lat_long(config["PATH"][0][0], config["PATH"][0][1])
