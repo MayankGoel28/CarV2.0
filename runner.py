@@ -59,7 +59,7 @@ def consumer():
         batch_lock.acquire()
         my_surroundings.append(ret)
         batch_lock.release()
-        print("---------------------")
+        
 
 
 def get_batch():
@@ -113,17 +113,18 @@ if __name__ == "__main__":
         st.title("Dashboard")
 
         display = st.empty()
-
+        button = st.sidebar.button("SOS", key="1")
+        button2 = st.sidebar.button("end SOS", key="2")
         while True:
             image = get_display_data(ego_id)
             display.image(image)
-            with st.sidebar:
-                if st.button("SOS"):
-                    SOS = True
-                    if st.button("End Distress"):
-                        SOS = False
-                else:
-                    SOS = False
-            time.sleep(0.05)
-
+            print(ego_id, SOS)
+            time.sleep(0.1)
+            # with display.sidebar:
+            if button:
+                SOS = True
+                # if st.button("End Distress", key=2):
+                #     SOS = False
+            elif button2:
+                SOS = False
     # vehicle.update_lat_long(config["PATH"][0][0], config["PATH"][0][1])
