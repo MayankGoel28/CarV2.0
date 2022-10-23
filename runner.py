@@ -12,7 +12,7 @@ from image_handler import update_image, update_locs
 import time
 import streamlit as st
 import sys
-
+import random
 
 def traverser():
     for i in range(len(path) - 1):
@@ -28,6 +28,7 @@ def traverser():
             # print(dist)
             if speed > dist:
                 current_coords = target
+                
             else:
                 current_coords[0] = (
                     current_coords[0] * (dist - speed) + target[0] * speed
@@ -52,6 +53,20 @@ def traverser():
                 "t2_y": target2[1],
             }
             vehicle.produce(json.dumps(event).encode("utf-8"))
+
+            # tree creation
+            if random.uniform(0, 1) < 0.01:
+                event = {
+                    "x": current_coords[0]+0.0000001,
+                    "y": current_coords[1]+0.0000001,
+                    "ID": 0,
+                    "speed": 0,
+                    "t1_x": 0,
+                    "t1_y": 0,
+                    "t2_x": 0,
+                    "t2_y": 0,
+                }
+                vehicle.produce(json.dumps(event).encode("utf-8"))
 
             if target[0] == current_coords[0] and target[1] == current_coords[1]:
                 break
