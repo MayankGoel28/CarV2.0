@@ -8,12 +8,13 @@ import time
 class Car:
     def __init__(self, config):
         # use a config file to define demo behaviour
-        self.consumer = KafkaConsumer(bootstrap_servers='164.52.208.158:9092') # Consumer to listen to local messages
-        self.producer = KafkaProducer(bootstrap_servers='164.52.208.158:9092') # producer to send events to local topic
-        
+        # self.consumer = KafkaConsumer(bootstrap_servers='164.52.208.158:9092') # Consumer to listen to local messages
+        # self.producer = KafkaProducer(bootstrap_servers='164.52.208.158:9092') # producer to send events to local topic
+        self.consumer = KafkaConsumer(bootstrap_servers='localhost:9092')
+        self.producer = KafkaProducer(bootstrap_servers='localhost:9092')
         time.sleep(5)
         
-        self.locationAPI = MapMyIndia("18b08477725b6446165d1f1b23b8a4f6")
+        self.locationAPI = MapMyIndia("414fc8ee192a63cf80c74d3595adecfa")
 
         self.location = "" # PINCODE | location is also the topic this car is subscribed to
         self.lat = config["PATH"][0][0]
@@ -22,6 +23,7 @@ class Car:
         self.speed = config["SPEED"]
         self.consumer_lock = Lock()
         self.producer_lock = Lock()
+        self.pincode = config["PIN"]
 
     
     def consume(self):
@@ -50,8 +52,8 @@ class Car:
         self.lat = lat
         self.long = long
 
-        # parameters = {"lat": lat, "lng": long, "REST_KEY":"18b08477725b6446165d1f1b23b8a4f6"}
+        # parameters = {"lat": lat, "lng": long, "REST_KEY":"414fc8ee192a63cf80c74d3595adecfa"}
 
         # result = requests.get(self.locationAPI.reverse_geocoding_api, params=parameters)
         # return result.json()["results"][0]["pincode"]
-        return "500031"
+        return self.pincode

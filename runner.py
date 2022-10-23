@@ -25,7 +25,7 @@ def traverser():
         if i < len(path)-2:
             target2 = path[i+2]
         while True:
-            time.sleep(0.05)
+            time.sleep(0.5)
             if global_vars.collided and not stopped:
                 stopped = True
                 event = {
@@ -33,8 +33,8 @@ def traverser():
                     "y": current_coords[1],
                     "ID": vehicle.carID,
                     "speed": speed,
-                    "t1_x": current_coords[0],
-                    "t1_y": current_coords[1],
+                    "t1_x": target[0],
+                    "t1_y": target[1],
                     "t2_x": current_coords[0],
                     "t2_y": current_coords[1],
                     "msg": "SOS"
@@ -77,7 +77,7 @@ def traverser():
             vehicle.produce(json.dumps(event).encode("utf-8"))
 
             # tree creation
-            if random.uniform(0, 1) < 0.01:
+            if random.uniform(0, 1) < 0.05:
                 event = {
                     "x": current_coords[0]+random.uniform(-0.001,0.001),
                     "y": current_coords[1]+random.uniform(-0.001,0.001),
@@ -163,6 +163,6 @@ if __name__ == "__main__":
         while True:
             image = get_display_data(ego_id)
             display.image(image)
-            time.sleep(0.1)
+            time.sleep(0.01)
             # with display.sidebar:
     # vehicle.update_lat_long(config["PATH"][0][0], config["PATH"][0][1])
