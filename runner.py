@@ -13,17 +13,38 @@ import time
 import streamlit as st
 import sys
 import random
+import global_vars
 
 def traverser():
+    stopped = False
     for i in range(len(path) - 1):
         current_coords = path[i]
+            
         target = path[i + 1]
         target2 = path[i+1]
         if i < len(path)-2:
             target2 = path[i+2]
         while True:
-            # print(current_coords)
             time.sleep(0.05)
+            if global_vars.collided and not stopped:
+                stopped = True
+                event = {
+                    "x": current_coords[0],
+                    "y": current_coords[1],
+                    "ID": vehicle.carID,
+                    "speed": speed,
+                    "t1_x": current_coords[0],
+                    "t1_y": current_coords[1],
+                    "t2_x": current_coords[0],
+                    "t2_y": current_coords[1],
+                    "msg": "SOS"
+                }
+                vehicle.produce(json.dumps(event).encode("utf-8"))
+                break
+            if global_vars.collided:
+                break
+            # print(current_coords)
+            
             dist = distance.geodesic(current_coords, target).km
             # print(dist)
             if speed > dist:
@@ -51,6 +72,7 @@ def traverser():
                 "t1_y": target[1],
                 "t2_x": target2[0],
                 "t2_y": target2[1],
+                "msg": ""
             }
             vehicle.produce(json.dumps(event).encode("utf-8"))
 
@@ -65,6 +87,7 @@ def traverser():
                     "t1_y": 0,
                     "t2_x": 0,
                     "t2_y": 0,
+                    "msg": ""
                 }
                 vehicle.produce(json.dumps(event).encode("utf-8"))
 
@@ -103,7 +126,7 @@ def get_display_data(ego_id):
 
 
 if __name__ == "__main__":
-
+    global_vars.init()
     if len(sys.argv) != 3:
         print("error")
         exit()
@@ -114,6 +137,10 @@ if __name__ == "__main__":
     with open(config_json_file) as json_file:
         config = json.load(json_file)
     print(config)
+    global path
+    global speed
+    global ego_id
+    global vehicle
     path = config["PATH"]
     speed = config["SPEED"]
     vehicle = Car(config)

@@ -54,4 +54,4 @@ class Car:
 
         # result = requests.get(self.locationAPI.reverse_geocoding_api, params=parameters)
         # return result.json()["results"][0]["pincode"]
-        return "500032"
+        return "500031"
