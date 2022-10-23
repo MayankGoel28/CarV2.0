@@ -43,7 +43,6 @@ def traverser():
                 "y": current_coords[1],
                 "ID": vehicle.carID,
                 "speed": speed,
-                "SOS": SOS,
                 "t1_x": target[0],
                 "t1_y": target[1],
             }
@@ -73,7 +72,6 @@ def get_batch():
     return ret
 
 
-SOS = False
 locs = {}
 
 
@@ -115,18 +113,9 @@ if __name__ == "__main__":
         st.title("Dashboard")
 
         display = st.empty()
-        button = st.sidebar.button("SOS", key="1")
-        button2 = st.sidebar.button("end SOS", key="2")
         while True:
             image = get_display_data(ego_id)
             display.image(image)
-            print(ego_id, SOS)
             time.sleep(0.1)
             # with display.sidebar:
-            if button:
-                SOS = True
-                # if st.button("End Distress", key=2):
-                #     SOS = False
-            elif button2:
-                SOS = False
     # vehicle.update_lat_long(config["PATH"][0][0], config["PATH"][0][1])
