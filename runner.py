@@ -18,6 +18,9 @@ def traverser():
     for i in range(len(path) - 1):
         current_coords = path[i]
         target = path[i + 1]
+        target2 = path[i+1]
+        if i < len(path)-2:
+            target2 = path[i+2]
         while True:
             # print(current_coords)
             time.sleep(0.05)
@@ -45,6 +48,8 @@ def traverser():
                 "speed": speed,
                 "t1_x": target[0],
                 "t1_y": target[1],
+                "t2_x": target2[0],
+                "t2_y": target2[1],
             }
             vehicle.produce(json.dumps(event).encode("utf-8"))
 
