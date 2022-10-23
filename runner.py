@@ -79,8 +79,8 @@ def traverser():
             # tree creation
             if random.uniform(0, 1) < 0.01:
                 event = {
-                    "x": current_coords[0]+0.0000001,
-                    "y": current_coords[1]+0.0000001,
+                    "x": current_coords[0]+random.uniform(-0.001,0.001),
+                    "y": current_coords[1]+random.uniform(-0.001,0.001),
                     "ID": 0,
                     "speed": 0,
                     "t1_x": 0,
